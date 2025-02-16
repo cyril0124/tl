@@ -1037,6 +1037,12 @@ do
    for c = string.byte("A"), string.byte("F") do
       lex_hexadecimals[string.char(c)] = true
    end
+   local lex_number_suffixes = {
+      ["u"] = true,
+      ["U"] = true,
+      ["l"] = true,
+      ["L"] = true,
+   }
 
    local lex_any_char_kinds = {}
    local single_char_kinds = { "[", "]", "(", ")", "{", "}", ",", ";", "?" }
@@ -1297,7 +1303,7 @@ do
                ls_open_lvl = 0
             end
          elseif state == "number dec" then
-            if lex_decimals[c] then
+            if lex_decimals[c] or lex_number_suffixes[c] then
 
             elseif c == "." then
                state = "number decfloat"
@@ -1325,7 +1331,7 @@ do
             end
             state = "any"
          elseif state == "number hex" then
-            if lex_hexadecimals[c] then
+            if lex_hexadecimals[c] or lex_number_suffixes[c] then
 
             elseif c == "." then
                state = "number hexfloat"
@@ -1381,7 +1387,7 @@ do
                state = "number hex"
             elseif c == "e" or c == "E" then
                state = "number powersign"
-            elseif lex_decimals[c] then
+            elseif lex_decimals[c] or lex_number_suffixes[c] then
                state = "number dec"
             elseif c == "." then
                state = "number decfloat"

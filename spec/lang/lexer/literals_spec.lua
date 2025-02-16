@@ -57,4 +57,20 @@ describe("lexer", function()
 
       util.run_check(input)
    end)
+
+   it("accept luajit number suffix", function()
+      util.run_check([[
+local a = 0x123ULL
+local b = 0x456ull
+local c = 0x123ll
+local d = 0x456LL
+print(a, b, c, d)
+
+local aa = 1234ULL
+local bb = 1234ull
+local cc = 0ull
+
+print(aa, bb, cc)
+      ]])
+   end)
 end)
